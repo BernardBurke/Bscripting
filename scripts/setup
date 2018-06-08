@@ -1,0 +1,4 @@
+#/bin/bash
+# This procedure runs the env.sh referred to by $ITSROOT and then exports ITSCOMMONFUNCTIONS
+source /mnt/spaceman/its/env/env.sh
+export ITSCOMMONFUNCTIONS=$ITSS/common_functions_library

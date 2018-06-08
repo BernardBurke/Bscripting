@@ -1,0 +1,12 @@
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Apr2011 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Apr2011 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Mar2011 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Mar2011 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Feb2011 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Feb2011 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Jan2011 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Jan2011 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Dec2010 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Dec2010 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Nov2010 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Nov2010 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Oct2010 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Oct2010 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Sep2010 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Sep2010 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Aug2010 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Aug2010 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Jul2010 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Jul2010 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/Jun2010 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/Jun2010 -d
+images_p2_p3 -s /lrsmountpoint/ftpxfer/RequestImages/May2010 -o lfsp3:/lrsmountpoint/ftpxfer/RequestImages/May2010 -d

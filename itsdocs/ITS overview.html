@@ -1,0 +1,1427 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.1  (Linux)">
+	<META NAME="AUTHOR" CONTENT="ben ">
+	<META NAME="CREATED" CONTENT="20100823;9071600">
+	<META NAME="CHANGEDBY" CONTENT="ben ">
+	<META NAME="CHANGED" CONTENT="20100823;14115800">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		H1 { margin-bottom: 0.21cm }
+		H1.western { font-family: "Arial", sans-serif; font-size: 16pt }
+		H1.cjk { font-family: "DejaVu Sans"; font-size: 16pt }
+		H1.ctl { font-family: "DejaVu Sans"; font-size: 16pt }
+		H2 { margin-bottom: 0.21cm }
+		H2.western { font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+		H5 { margin-bottom: 0.21cm }
+		H5.western { font-family: "Arial", sans-serif; font-size: 11pt }
+		H5.cjk { font-size: 11pt }
+		H5.ctl { font-size: 11pt }
+		A:link { so-language: zxx }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-AU" DIR="LTR">
+<P ALIGN=CENTER STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT FACE="Arial, sans-serif"><FONT SIZE=5><B>ITS
+Environment</B></FONT></FONT></P>
+<P ALIGN=CENTER STYLE="margin-top: 0.42cm; page-break-after: avoid"><BR><BR>
+</P>
+<P>The ITS acronym refers to IT Scripting, where the IT is a generic
+department name. 
+</P>
+<P><BR><BR>
+</P>
+<P>This environment has been slowly developing over the last 10
+years, where the author made a move  towards Unix and Windows
+environments being used for serious production purposes.</P>
+<P><BR><BR>
+</P>
+<P>It is intended to release some parts of the ITS environment to the
+Open Source community.</P>
+<H1 CLASS="western">1Principles</H1>
+<P>While the Unix and Windows versions of ITS are not identical, they
+are built with the following <B>principles</B> in mind.</P>
+<P><BR><BR>
+</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">The
+	file system that implements ITS should </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>separate
+	code, data and logfiles.</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+	This allows us to logically separate generally read only files from
+	scratch areas, giving file access privileges as required.</SPAN></SPAN></P>
+	<LI><P STYLE="margin-bottom: 0cm">The scripting environment should
+	<B>use relative file system paths</B>. As the first principle
+	forbids the use of hard coded variables, this principle indicates
+	that there should  no hard-coded file system paths in any script.
+	Unix and Windows provide environment variables which which can
+	replace all or part of a file specification.</P>
+	<LI><P STYLE="margin-bottom: 0cm">If a function or procedure is
+	called from more than once, <B>the common function should be
+	included from a library.</B><SPAN STYLE="font-weight: normal"> </SPAN>
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-weight: normal">All
+	scripts should be based on a </SPAN><B>standard template.</B><SPAN STYLE="font-weight: normal">
+	A standard template will allow developers to become productive
+	quickly. The template should only contain code that does </SPAN><I><SPAN STYLE="font-weight: normal">not</SPAN></I><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+	exist in a common function library.</SPAN></SPAN></P>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">The
+	scripting environment should be </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>data
+	driven. </B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+	Scripts should be developed and tested away from production
+	environments. When customisation is needed in a production
+	environment, this customisation should be achieved by modifying
+	tables of data that are read by scripts. We should never alter a
+	scripts contents in production environments.</SPAN></SPAN></P>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Scripts
+	should employ </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>common
+	logging and alerting</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+	methods. As most scripts are not run interactively, locating and
+	interpreting their output should be easy. When failures occur that
+	require attention, standard means should be available to notify
+	support staff. </SPAN></SPAN>
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Scripts
+	should employ </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>in-line
+	error handling</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+	where ever possible and </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>provide
+	a default error handler</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+	as a catch all.</SPAN></SPAN></P>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Scripts
+	should contain sufficient comments to </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>generate
+	their own documentation</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">.
+	</SPAN></SPAN>
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Where
+	possible, scripts should be written in a </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>standard
+	shell or language</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">.
+	On Windows, the Windows Scripting Host environment is used, which
+	all code written in VBScript. Experience indicates that Microsoft
+	Power Shell is still many years away from supplanting VBScript. On
+	Unix, the Bourne again shell (bash) was chosen as a preferred shell
+	on various distos of Linux.</SPAN></SPAN></P>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Script
+	filenames should be </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>as
+	descriptive as possible</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">.
+	Where a script serves several purposes, file system links should
+	represent the variations.</SPAN></SPAN></P>
+	<LI><P STYLE="margin-bottom: 0cm"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Scripts
+	should have a </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>standard
+	means of collecting command line arguments.</B></SPAN></P>
+	<LI><P STYLE="margin-bottom: 0cm; font-weight: normal"><SPAN STYLE="font-style: normal">Scripts
+	should be capable of writing </SPAN><SPAN STYLE="font-style: normal"><B>verbose
+	debugging messages</B></SPAN><SPAN STYLE="font-style: normal"> as
+	required, with the level of verbosity being adjustable at run time.</SPAN></P>
+</OL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<H1 CLASS="western">2ITS on Microsoft Windows</H1>
+<P>The ITS environment for windows is written for Win2k3 and later on
+servers, XP and later on desktops.</P>
+<H2 CLASS="western">File system structure</H2>
+<P>ITS on windows uses the following environment variables:</P>
+<OL>
+	<LI><P>ITS_PROCEDURES – refers to where scripts are deployed to
+	and executed from.</P>
+	<LI><P>ITS_DATA – refers to any input or output data that a script
+	reads or writes.</P>
+	<LI><P>ITS_LOG -  is a scratch area where logfiles are written.</P>
+</OL>
+<P>To deploy ITS on a windows platform, one should create System
+Environment variables similar to the following example:</P>
+<P STYLE="margin-left: 1.25cm"><FONT FACE="Courier 10 Pitch">ITS_DATA=c:\its\its_data</FONT></P>
+<P STYLE="margin-left: 1.25cm"><FONT FACE="Courier 10 Pitch">ITS_LOG=c:\its\its_log</FONT></P>
+<P STYLE="margin-left: 1.25cm"><FONT FACE="Courier 10 Pitch">ITS_PROCEDURES=c:\its\its_procedures</FONT></P>
+<P>Note: Windows supports Process Environment variables which could
+be used to run multiple environments on a given platform</P>
+<P><BR><BR>
+</P>
+<P>The above structure implements <B>principle 1.</B></P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western"><B>Run time environment</B></H2>
+<P><BR><BR>
+</P>
+<P><B>Vbscript </B><SPAN STYLE="font-weight: normal"> is made
+available by the Windows Script Host (WSH) environment, which has
+been available on Windows for over 10 years.  </SPAN>
+</P>
+<P><BR><BR>
+</P>
+<P><SPAN STYLE="font-weight: normal">Earlier versions of WSH lacked
+the capability to Include external modules. The ITS environment uses
+the Windows Script File (.WSF) method of executing script, which uses
+XML tags to control execution and allows inclusion of external
+modules.</SPAN></P>
+<P><BR><BR>
+</P>
+<P><SPAN STYLE="font-weight: normal">Here is a sample of the WSF XML
+at the beginning of a standard script:</SPAN></P>
+<P><BR><BR>
+</P>
+<P><A NAME="job id"></A><FONT FACE="Courier 10 Pitch"><B>&lt;job
+id=&quot;sms2group.wsf&quot;&gt;</B></FONT></P>
+<P><A NAME="static data"></A><FONT FACE="Courier 10 Pitch"><B>&lt;script
+language=&quot;VBScript&quot; src=&quot;StaticDataDefinitions5.vbs&quot;/&gt;</B></FONT></P>
+<P><A NAME="dynamic data"></A><FONT FACE="Courier 10 Pitch"><B>&lt;script
+language=&quot;VBScript&quot; src=&quot;DynamicDataDefinitions5.vbs&quot;/&gt;</B></FONT></P>
+<P><A NAME="common functions included"></A><FONT FACE="Courier 10 Pitch"><B>&lt;script
+language=&quot;VBScript&quot; src=&quot;CommonFunctionsLibrary5.vbs&quot;/&gt;</B></FONT></P>
+<P><A NAME="script language"></A><FONT FACE="Courier 10 Pitch"><B>&lt;script
+language=&quot;VBScript&quot;&gt;</B></FONT></P>
+<P><BR><BR>
+</P>
+<OL>
+	<LI><P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">A
+	Windows Script File (WSF) can contain multiple Jobs, tagged by
+	unique Job ID. In general, ITS contains only one job per file</FONT></P>
+	<LI><P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">Static
+	Data Definitions. A scripting environment will require various
+	</FONT><FONT FACE="Times New Roman, serif"><B>constants</B></FONT><FONT FACE="Times New Roman, serif">
+	and other variables that always have the same value. This file
+	contains those definitions.</FONT></P>
+	<LI><P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">Dynamic
+	Data Definitions. Scripts will require variables that are set at run
+	time, prior to mainline initialisation. An example is the </FONT><FONT FACE="Times New Roman, serif"><B>username</B></FONT><FONT FACE="Times New Roman, serif">
+	of the process executing the script, which unknown until execution.
+	Further, the </FONT><FONT FACE="Times New Roman, serif"><B>environment
+	variables </B></FONT><FONT FACE="Times New Roman, serif"> that
+	implement </FONT><FONT FACE="Times New Roman, serif"><B>principle 2</B></FONT><FONT FACE="Times New Roman, serif">
+	are set as dynamic data.</FONT></P>
+	<LI><P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">Common
+	Functions Library. Implementing </FONT><FONT FACE="Times New Roman, serif"><B>principle
+	3, </B></FONT><FONT FACE="Times New Roman, serif"> this statement
+	includes a set of functions used by many scripts.</FONT></P>
+	<LI><P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">The
+	last tag indicates that the entire module is written in Vbscript.
+	(WSH supports tagged sections in various script languages)</FONT></P>
+</OL>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<H2 CLASS="western"><FONT FACE="Times New Roman, serif">Initialisation</FONT></H2>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">As any script begins
+execution, local constants and variables are declared immediately
+after the Includes section.</FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">The very first procedure
+called by any script is a subroutine in commonfunctionslibrary called
+</FONT><FONT FACE="Times New Roman, serif"><B>initialise().</B></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">The
+</FONT><FONT FACE="Times New Roman, serif"><B>initialise </B></FONT><FONT FACE="Times New Roman, serif">routine
+interprets the script name, builds a date and time stamp and creates
+a </FONT><FONT FACE="Times New Roman, serif"><B>log file name</B></FONT><FONT FACE="Times New Roman, serif">,
+of the form ITS_LOG\</FONT><FONT FACE="Times New Roman, serif"><B>scriptname_username_yyyymmddmmhhss.log</B></FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">All
+subsequent script output is written to this logfile by the </FONT><FONT FACE="Times New Roman, serif"><B>message</B></FONT><FONT FACE="Times New Roman, serif">
+common subroutine. The </FONT><FONT FACE="Times New Roman, serif"><B>message</B></FONT><FONT FACE="Times New Roman, serif">
+subroutine calls </FONT><FONT FACE="Times New Roman, serif"><B>logger</B></FONT><FONT FACE="Times New Roman, serif">
+common function. </FONT><FONT FACE="Times New Roman, serif"><B>Logger
+</B></FONT><FONT FACE="Times New Roman, serif">creates a </FONT><FONT FACE="Times New Roman, serif"><B>log
+file </B></FONT><FONT FACE="Times New Roman, serif"> as required and
+appends all </FONT><FONT FACE="Times New Roman, serif"><B>message
+</B></FONT><FONT FACE="Times New Roman, serif">output to this </FONT><FONT FACE="Times New Roman, serif"><B>log
+file</B></FONT><FONT FACE="Times New Roman, serif">, along with an
+execution timestamp.</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">These
+routines implement </FONT><FONT FACE="Times New Roman, serif"><B>principle
+6 </B></FONT><FONT FACE="Times New Roman, serif">via the first
+examples of </FONT><FONT FACE="Times New Roman, serif"><B>principle
+3</B></FONT><FONT FACE="Times New Roman, serif">.</FONT></P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western"><FONT FACE="Times New Roman, serif"><B>Error
+Handling</B></FONT></H2>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><B>VBScript</B></FONT><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">
+has quite simplistic error handling. One of two error handling </SPAN></FONT><FONT FACE="Times New Roman, serif"><B>modes
+</B></FONT><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">
+are in effect:</SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<OL>
+	<LI><P><B><FONT FACE="Times New Roman, serif">On error goto 0 - </FONT></B><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">
+	this is the default mode, where any run-time error causes an
+	exception which will cause the script to exit. Upon exit, WSH will
+	print the exception details and a </SPAN></FONT><B><FONT FACE="Times New Roman, serif">line
+	number</FONT></B><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">,
+	giving a trouble-shooter a starting point to debug a problem.</SPAN></FONT></P>
+	<LI><P><B><FONT FACE="Times New Roman, serif">On error resume next -
+	</FONT></B><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">
+	in this mode, the script processor ignores run time errors. The
+	developer must examine the </SPAN></FONT><B><FONT FACE="Times New Roman, serif">err</FONT></B><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">
+	object and make a programmatic decision on how to handle the error</SPAN></FONT></P>
+</OL>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">What
+this means in practice, is we cannot satisfy all of </SPAN></FONT><B><FONT FACE="Times New Roman, serif">principle
+7</FONT></B><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">
+as Vbscript has no concept of a user-defined default error handler.
+It is possible that any script could simply “fail” and it is
+difficult to even log the event that lead to failure.</SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">Strictly
+speaking, any program statement that </SPAN></FONT><FONT FACE="Times New Roman, serif"><I><SPAN STYLE="font-weight: normal">could
+</SPAN></I></FONT><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+fail should be wrapped in a code block such as:</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	on
+error resume next</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	'
+Create HTTP object</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	Set
+Http = CreateObject(&quot;Microsoft.XmlHttp&quot;)</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	if
+err.number &lt;&gt; 0 then</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		message
+&quot;Failed to create MS XMLHTTP object&quot;</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		on
+error goto 0</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		exit
+function</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	end
+if</SPAN></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">As
+you can imagine, this could make any code extremely voluminous and
+provide a high likelihood that an error may be missed. We must accept
+this limitations of Vbscript and find a compromise in this behaviour
+through a general approach.</SPAN></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">In
+the above example, the code snippet will perform an </SPAN></SPAN></FONT><B><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal">exit
+function</SPAN></FONT></B><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+when an error condition exists.  Throughout the ITS environment,
+function calls are generally checked as follows:</SPAN></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	If
+not FuctionName(p1,p2) then </SPAN></SPAN></FONT>
+</P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">				'
+do something</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">				...</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Within
+any function, the general approach is to do in-line error handling in
+a granular fashion, and use Boolean function returns similar to:</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		on
+error resume next</SPAN></SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		'
+do something</SPAN></SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		'
+then check err object</SPAN></SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		if
+err.number &lt;&gt; 0</SPAN></SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">			'
+exit the function with no return value (false)</SPAN></SPAN></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		'
+at the end of the function, set a return value</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		FunctionName
+= True</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	end
+function</SPAN></SPAN></FONT></P>
+<P STYLE="font-weight: normal"><SPAN STYLE="font-style: normal"><FONT FACE="Times New Roman, serif">This
+approach provides a reasonable compromise with the available error
+handling methods.</FONT></SPAN></P>
+<H5 CLASS="western"><BR><BR>
+</H5>
+<H2 CLASS="western" STYLE="page-break-before: always"><FONT FACE="Arial, sans-serif"><I><B>Creating
+a new script</B></I></FONT></H2>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">All
+new scripts should be created from a standard template, as stated in
+</SPAN></SPAN><SPAN STYLE="font-style: normal"><B>principle 4</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">.</SPAN></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">This
+script is customised by a utility called </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>newscript.vbs</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">,
+which </SPAN></SPAN><I><SPAN STYLE="font-weight: normal">does not</SPAN></I><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+comply to all the other principles, but simply enforces </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>principle
+4</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+on all new scripts. </SPAN></SPAN></FONT>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Here
+is the current template WSF file, which contains comment templates
+(providing the building blocks for </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>principle
+8</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">),
+file includes, initialisation and command line argument handling (as
+specified in </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>principle
+11)</B></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&lt;job
+id=&quot;script_name_token&quot;&gt;</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&lt;script
+language=&quot;VBScript&quot; src=&quot;StaticDataDefinitions5.vbs&quot;/&gt;</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&lt;script
+language=&quot;VBScript&quot; src=&quot;DynamicDataDefinitions5.vbs&quot;/&gt;</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&lt;script
+language=&quot;VBScript&quot; src=&quot;CommonFunctionsLibrary5.vbs&quot;/&gt;</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&lt;script
+language=&quot;VBScript&quot;&gt;</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+==============================================================================
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+Script.........: [script_name_token.wsf] </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+Author.Email...: [ben.burke@internode.on.net] </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+Version........: 1.0 </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+Date Written...........: date_token</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+One Line Description: one_line_token</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+			</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+For Detailed Description and revision history, go to end of file </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+(this saves the interpreter from 'reading' the comments.</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Option
+Explicit </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">On
+Error Goto 0 </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Declare Constants </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Declare Variables </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Do something </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">initialise</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">CommandLineArgs</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Main</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Subroutine.....: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Purpose........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Arguments......: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Example........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Requirements...: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Notes..........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">sub
+Main</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">end
+sub</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Subroutine.....: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Purpose........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Arguments......: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Example........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Requirements...: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Notes..........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Subroutine.....: CommandLineArgs</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Purpose........: Turn Command line arguements into variables</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Arguments......: None</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Example........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Requirements...: Variables need to be declared in higher scope</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Notes..........: Plan to generalise this and move to function
+library</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Sub
+CommandLineArgs()</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	dim
+NamedArgs </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	set
+NamedArgs = wscript.arguments.named</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	if
+NamedArgs.exists(&quot;debug&quot;) then</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		debuglevel
+= NamedArgs.item(&quot;debug&quot;)</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		message
+&quot;Debuglevel set to &quot; &amp; debuglevel</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	end
+if </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">end
+sub</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Function.......: function_name</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Purpose........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Arguments......: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Returns.........:</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Example........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Requirements...: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Notes..........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+--------------------------------------------------------------------------
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+==============================================================================
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ End  Of Script </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+==============================================================================
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Description....: ' script_name_token.vbs</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'	Lengthy
+Description here.</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Notes..........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Customize......: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+==============================================================================
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Revised By.....: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Email..........: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Revision Date..: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ Revision Notes.: </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+ </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+==============================================================================
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'
+==============================================================================
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&lt;/script&gt;</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&lt;/job&gt;</SPAN></SPAN></FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">The
+above script template contains the string “token” in several
+places. The </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>newscript.vbs
+</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">utility
+replaces these tokens with some calculated and prompted equivalences.
+</SPAN></SPAN></FONT>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">As
+noted above, the new script utility is </SPAN></SPAN><I><SPAN STYLE="font-weight: normal">not</SPAN></I><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+a standard script. We simply prompt the user for a script name and a
+one line description. Then, we read the standard template, replacing
+several named tokens. Then, the newly created script is ready for
+editting.</SPAN></SPAN></FONT></P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Here
+is the </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>newscript
+</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">utility:</SPAN></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">'Newscript
+- read a template and fill in some blanks by asking some questions</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">option
+explicit </SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Dim
+fso</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">dim
+oFile</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">dim
+i</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">const
+template=&quot;templatev5.wsf&quot;</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">main</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">sub
+main</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	dim
+tso1</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	dim
+tso2</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	dim
+userArray</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	dim
+newscriptname</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	dim
+oneliner</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	dim
+YourAPieceOfString</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	set
+FSO = wscript.createobject(&quot;scripting.filesystemobject&quot;)</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	if
+fso.fileexists(template) then</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		set
+tso1 = fso.opentextfile(template)</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		YourAPieceOfString
+= tso1.readall</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		tso1.close</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		set
+tso1 = nothing</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	else</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		wscript.echo
+&quot;Can't find &quot; &amp; template</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	end
+if</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	
+</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	newscriptname
+= inputbox (&quot;New script name (no extenstions)--&gt;&quot;,
+&quot;Create a new script&quot;)</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	if
+newscriptname = &quot;&quot; then exit sub</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	newscriptname
+= newscriptname &amp; &quot;.wsf&quot;</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	if
+fso.fileexists(newscriptname) then</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		wscript.echo
+&quot;Sorry, that file exists &quot; &amp; newscriptname</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">		exit
+sub</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	end
+if</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	oneliner
+= inputbox (&quot;Enter a very brief description--&gt;&quot;, &quot;One
+Line description&quot;)</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	YourAPieceOfString
+= replace(YourAPieceOfString,&quot;script_name_token&quot;,
+newscriptname)</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	YourAPieceOfString
+= replace(YourAPieceOfString,&quot;date_token&quot;, now())</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	YourAPieceOfString
+= replace(YourAPieceOfString,&quot;one_line_token&quot;, oneliner)</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	wscript.echo
+&quot;Creating &quot; &amp; newscriptname</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	set
+tso2 = fso.createtextfile(newscriptname)</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	tso2.write
+YourAPieceOfstring</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	tso2.close</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">	</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">end
+sub</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal"></SPAN></SPAN></FONT></FONT></P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=4><I><B>Debugging
+Levels</B></I></FONT></FONT></H2>
+<P><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal"><FONT FACE="Times New Roman, serif"><FONT SIZE=3>A
+new script contains one standard command line argument, <B>debug</B>.
+This argument is parsed into a variable, which is examined by the
+<B>debugwrite </B> common subroutine. Calls to the <B>debugwrite</B>
+routine look as follows:</FONT></FONT></P>
+<P STYLE="font-style: normal; font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>	debugwrite
+2, “Now doing action blah blah”</FONT></FONT></P>
+<P STYLE="font-style: normal; font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal"><FONT FACE="Times New Roman, serif"><FONT SIZE=3>When
+the <B>debug</B> command line argument is set to 2 or higher,
+<B>debugwrite</B> will call the <B>message</B> routine, passing the
+second argument. </FONT></FONT>
+</P>
+<P STYLE="font-style: normal; font-weight: normal"><FONT FACE="Times New Roman, serif"><FONT SIZE=3>This
+way, the granularity of debugging messages can be controller at run
+time, as per <B>principle 12</B></FONT></FONT></P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western"><I><B>Access to data</B></I></H2>
+<P><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal">Many
+implementations based  on the ITS environment make extensive use of
+the Activex Data Object known as a record set.</P>
+<P STYLE="font-style: normal; font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal">The common
+functions library contains functions to connect to various data
+sources, which include excel spreadsheets, CONNIX data sources,
+MS-SQL databases and Active Directory objects.</P>
+<P STYLE="font-style: normal; font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal">Scripts that apply
+<B>principle 5</B> can use the MakeRecordSet function along with the
+specific connection routines to access tabular data.  (The standard
+File System Object can be used to read text files that contain data)</P>
+<P STYLE="font-style: normal; font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal"><BR><BR>
+</P>
+<H1 CLASS="western" STYLE="page-break-before: always">3ITS on Unix</H1>
+<P>The ITS environment was developed on Ubuntu Lucid Lynx (10.4) and
+Open SuSE 11.2, using the Bourne again shell (bash).  
+</P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western">File system structure</H2>
+<P>ITS on unix uses the following environment variables:</P>
+<OL>
+	<LI><P>ITS_SCRIPTS – refers to where scripts are deployed to and
+	executed from.</P>
+	<LI><P>ITS_DATA – refers to any input or output data that a script
+	reads or writes.</P>
+	<LI><P>ITS_LOG -  is a scratch area where logfiles are written.</P>
+</OL>
+<OL START=4>
+	<LI><P>ITS_ENV – containing environment setup scripts</P>
+</OL>
+<P>To deploy ITS on a unix platform, one should create a directory
+hierarchy similar to the following:</P>
+<P><FONT FACE="Courier 10 Pitch">/its</FONT></P>
+<P><FONT FACE="Courier 10 Pitch">/its/scripts</FONT></P>
+<P><FONT FACE="Courier 10 Pitch">/its/logs</FONT></P>
+<P><FONT FACE="Courier 10 Pitch">/its/data</FONT></P>
+<P><FONT FACE="Courier 10 Pitch">/its/env ' optional</FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">Within the /its/env directory,
+a default environment setup script can be created, similar to the
+follow:</FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>#!/bin/bash</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>if [ &quot;$ITSROOT&quot;
+= &quot;&quot; ]; then</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>	export ITSROOT=&quot;/its&quot;</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>fi</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>if [ &quot;$DEBUG&quot;
+= &quot;true&quot; ]; then</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>	set -xv</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>fi</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>export
+ITSS=$ITSROOT/scripts</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>export
+ITSL=$ITSROOT/logs</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>export
+ITSD=$ITSROOT/data</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>export
+ITSE=$ITSROOT/env</FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>PATH=&quot;$PATH:$ITSS&quot;</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P>The above structure implements <B>principle 1.</B></P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western"><B>Run time environment</B></H2>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">Since
+various Unix implementations and shells have different means of 
+implementing run commands (.rc files for a shell), an environment
+setup independent of platform is required.</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">As
+most of these scripts will execute via cron, the environment setup
+must be universally suitable to  the manner in which cron daemons
+inherit environment variables.</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">The
+following approach was taken. A single environment variable
+ITSCOMMONFUNCTIONS must exist and point to the function library
+script.</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">Within
+a cron tab, the declaration of ITSCOMMONFUNCTIONS will look as
+follows:</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch">#
+crontab for root</FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch">ITSCOMMONFUNCTIONS=/its/scripts/common_functions_library</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">This
+method has proved workable for all the Unix platforms tested and will
+allow different environments to co-exist.</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">Interactive
+users might execute a setup script similar to:</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch">export
+ITSCOMMONFUNCTIONS=$ITSS/common_functions_library</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><B>Principles 2 and 3 </B><SPAN STYLE="font-weight: normal">
+are implemented by the above approach.</SPAN></FONT></P>
+<H2 CLASS="western"><FONT FACE="Times New Roman, serif">Initialisation</FONT></H2>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">If
+the function library (pointed to by ITSCOMMONFUNCTIONS) does not
+exist as a file, execution terminates.</SPAN></FONT></P>
+<P><FONT FACE="Times New Roman, serif">All scripts begin execution by
+including the function library with a </FONT><FONT FACE="Times New Roman, serif"><B>source</B></FONT><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">
+statement. </SPAN></FONT>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">When
+the parent process is cron, stdout is redirected to a </SPAN></FONT><FONT FACE="Times New Roman, serif"><B>logfile
+</B></FONT><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">named
+$ITSL/</SPAN></FONT><FONT FACE="Times New Roman, serif"><B>scriptname.log</B></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">All
+subsequent script output is written to stdout by the </FONT><FONT FACE="Times New Roman, serif"><B>generate_event
+</B></FONT><FONT FACE="Times New Roman, serif">script, which has the
+following aliases:</FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">	</FONT><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>gen_info=&quot;generate_event
+-f $PROGNAME -s i -m&quot;</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>	gen_success=&quot;generate_event
+-f $PROGNAME -s s -m&quot;</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>	gen_warning=&quot;generate_event
+-f $PROGNAME -s w -m&quot;</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>	gen_error=&quot;generate_event
+-f $PROGNAME -s e -m&quot;</FONT></FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>	gen_fatal=&quot;generate_event
+-f $PROGNAME -s f -m&quot;</FONT></FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">These
+aliases implement </FONT><FONT FACE="Times New Roman, serif"><B>principle
+6 </B></FONT><FONT FACE="Times New Roman, serif">via the first
+examples of </FONT><FONT FACE="Times New Roman, serif"><B>principle
+3</B></FONT><FONT FACE="Times New Roman, serif">.</FONT></P>
+<H2 CLASS="western"><FONT FACE="Times New Roman, serif"><B>Error
+Handling</B></FONT></H2>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">Bourne
+again shell provides a </FONT><FONT FACE="Times New Roman, serif"><B>trap</B></FONT><FONT FACE="Times New Roman, serif">
+statement that can be used to invoke a function upon receipt of
+various signals (NOHUP, INT) or the ERR signal.</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">Inline
+error handling should be dealt with by suppressing the </FONT><FONT FACE="Times New Roman, serif"><B>trap
+</B></FONT><FONT FACE="Times New Roman, serif"> for ERR as follows:</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch"># turn
+off default handler</FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch">trap
+-ERR</FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch"># do
+something and do inline checking of return status (${?})</FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch"># turn
+back on default handler</FONT></P>
+<P STYLE="font-weight: normal"><FONT FACE="Courier 10 Pitch">trap
+&quot;error_exit ERR&quot; ERR</FONT></P>
+<P STYLE="font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-weight: normal"><FONT FACE="Times New Roman, serif">The
+common functions library provides a default error handler that will
+use standard </FONT><FONT FACE="Times New Roman, serif"><B>generate_event</B></FONT><FONT FACE="Times New Roman, serif">
+calls to communicate error conditions, satisfying all of </FONT><FONT FACE="Times New Roman, serif"><B>principle
+7.</B></FONT></P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western" STYLE="page-break-before: always"><FONT FACE="Arial, sans-serif"><I><B>Creating
+a new script</B></I></FONT></H2>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">All
+new scripts should be created from a standard template, as stated in
+</SPAN></SPAN><SPAN STYLE="font-style: normal"><B>principle 4</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">.</SPAN></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">At
+the time of writing, the </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>newscript
+</B></SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">bash
+script is incomplete. Instead of a template, here is an example
+script, </SPAN></SPAN><SPAN STYLE="font-style: normal"><B>timed_rsync</B></SPAN></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#!/bin/bash</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Shell
+program to implement standardised rsync operations based on
+parameters.</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Copyright
+2009, Ben Burke,Sydney Australia,Infrastructure Manager - the
+Virtualco, ben.burke@internode.on.net.</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	This
+program is free software; you can redistribute it and/or</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	modify
+it under the terms of the GNU General Public License as</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	published
+by the Free Software Foundation; either version 2 of the</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	License,
+or (at your option) any later version. </B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	This
+program is distributed in the hope that it will be useful, but</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	WITHOUT
+ANY WARRANTY; without even the implied warranty of</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	General
+Public License for more details.</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Description:</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Usage:</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#		timed_rsync
+[ -h | --help ] [-s source_path] [-o output_path] [-d]</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Options:</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#		-h,
+--help	Display this help message and exit.</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#		-s
+ source_path source path - rsync will change dir to this location as
+source</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#		-o
+ output_path output_path - destination of the rsync</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#		-d
+             when d is 'yes', actually run the rsyn. Otherwise do a
+check pass</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#		-r
+ adds the --remove-source-files switch to the rsync command</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Revision
+History:</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	8-dec-2009	File
+created by new_script ver. 2.1.0</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	4-Jan-2009	Updated
+to use standard common_functions_library</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#			Removed
+trap ERR and built case statement around rsync return values</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#			Rsync
+output directed to TEMP_FILE1. </B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#			Generate
+event updated to add a files contents to mail message body</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>if
+[ -f  &quot;$ITSCOMMONFUNCTIONS&quot; ];then</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	source
+$ITSCOMMONFUNCTIONS</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>else</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	echo
+&quot;ITSCOMMONFUNCTIONS not defined. Exitting&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	exit
+1</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>fi</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Constants</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	PROGNAME=$(basename
+$0)</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+	PROGNAME is now determined in the common_functions_library</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	VERSION=&quot;1.0.1&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+any script specific clean up - will be called by included function
+clean_up</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>function
+local_clean_up</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>{</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	$gen_info
+&quot;Local Clean up called&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	cd
+$ORIGINAL_DIR</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>}</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>function
+usage</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>{</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-----------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Function
+to display usage message (does not exit)</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#		No
+arguments</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-----------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	echo
+&quot;Usage: ${PROGNAME} [-h | --help] [-s source_path] [-o
+output_path] [-d] [-r]&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>}</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>function
+helptext</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>{</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-----------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Function
+to display help message for program</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#		No
+arguments</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-----------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	local
+tab=$(echo -en &quot;\t\t&quot;)</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	cat
+&lt;&lt;- -EOF-</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	${PROGNAME}
+ver. ${VERSION}</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	This
+is a program to implement standardised rsync operations based on
+parameters.</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	$(usage)</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	Options:</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	-h,
+--help	Display this help message and exit.</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	-s
+ source_path source path - rsync will change dir to this location as
+source</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	-o
+ output_path output_path - destination of the rsync</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	-d
+             when -d is present, actually run the rsyn. Otherwise do
+a check pass</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	-r
+ adds the --remove-source-files switch to the rsync command, deleting
+the files that were copied </B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		from
+the source</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>-EOF-</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>}</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	Program
+starts here</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#	-------------------------------------------------------------------</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#####
+Initialization And Setup #####</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>initialise</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#####
+Command Line Processing #####</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>if
+[ &quot;$1&quot; = &quot;--help&quot; ]; then</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	helptext</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	graceful_exit</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>fi</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+empty variables to inherit values from the command line </B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>SOURCE_PATH=&quot;&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>OUTPUT_PATH=&quot;&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+Default action is to do test run only - don't actuall copy anything
+(that's the -n)</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>DOIT=&quot;-n
+-i&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>ORIGINAL_DIR=&quot;$(pwd)&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>REMOVESOURCE=&quot;&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>while
+getopts &quot;:hs:o:dr&quot; opt; do</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	case
+$opt in</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		s
+)	$gen_info &quot;source path - rsync will change dir to this
+location as source - argument = $OPTARG&quot; </B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			SOURCE_PATH=&quot;$OPTARG&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			;;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		o
+)	$gen_info &quot;output_path - destination of the rsync - argument =
+$OPTARG&quot; </B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			OUTPUT_PATH=&quot;$OPTARG&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			;;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		d
+)	$gen_info &quot;d is present, we will actually run the rsync&quot;
+</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			DOIT=&quot;-i&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			;;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		r
+) 	$gen_info &quot;r is present, we will delete the source files
+after they are copied&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			REMOVESOURCE=&quot;--remove-source-files&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			;;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		h
+)	helptext</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			graceful_exit
+;;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		*
+)	usage</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			clean_up</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>			exit
+1</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	esac</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>done</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#####
+Main Logic #####</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+SOURCE_PATH is a directory - that's about as much checking as we can
+do</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>if
+[ -d &quot;${SOURCE_PATH}&quot; ]; then</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		cd
+$SOURCE_PATH</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		#working
+with Mark's advice, all rsync will be executed with . as input spec -
+get around relative path issues</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>		$gen_info
+&quot;Successfully changed directory to $SOURCE_PATH&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	else</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	$gen_warning
+&quot;Source Path $SOURCE_PATH is not a directory&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	exit
+1</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>fi</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+OUTPUT_PATH is a non-blank - since the output path is often remote,
+can't check too much</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>if
+[  &quot;${OUTPUT_PATH}&quot; != &quot;&quot; ]; then</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	$gen_info
+ &quot;Output to $OUTPUT_PATH &quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>else</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	$gen_warning
+&quot;$OUTPUT_PATH is not set&quot;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	clean_up</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	exit
+1</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>fi</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+if we leave the standard ERR trap engaged, we'll fall out through the
+default error_exit and </B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+loose the context of what went wrong. </B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+Turn it off now and leave it off for the rest of the script</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>trap
+- ERR</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+Will leave debugging output on for the rest of this script during bed
+in period</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>set
+-xv</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>time
+rsync $DOIT --no-checksum --no-perms -S -R -a -u -W $REMOVESOURCE .
+$OUTPUT_PATH &gt;  $TEMP_FILE1 2&gt;&amp;1</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>STATUS=$?</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+dump the output of rsync command here too, so it ends up in the
+logfile</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>cat
+$TEMP_FILE1</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>case
+$STATUS in</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	0)	graceful_exit;;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	1)	STATUSMESSAGE=&quot;Syntax
+or usage error&quot;;;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	2)
+     STATUSMESSAGE=&quot;Protocol incompatibility&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	3)
+     STATUSMESSAGE=&quot;Errors selecting input/output files,
+dirs&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	4)
+     STATUSMESSAGE=&quot;Requested action not supported: attempt 
+made to manipulate 64-bit files on wrong platform&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	5)
+     STATUSMESSAGE=&quot;Error starting client-server protocol&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	6)
+     STATUSMESSAGE=&quot;Daemon unable to append to log-file&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>10)
+    	STATUSMESSAGE=&quot;Error in socket I/O&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>11)
+    	STATUSMESSAGE=&quot;Error in file I/O&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>12)
+    	STATUSMESSAGE=&quot;Error in rsync protocol data stream&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>13)
+    	STATUSMESSAGE=&quot;Errors with program diagnostics&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>14)
+    	STATUSMESSAGE=&quot;Error in IPC code&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>20)
+    	STATUSMESSAGE=&quot;Received SIGUSR1 or SIGINT&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>21)
+    	STATUSMESSAGE=&quot;Some error returned by waitpid()&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>22)
+    	STATUSMESSAGE=&quot;Error allocating core memory buffers&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>23)
+    	STATUSMESSAGE=&quot;Partial transfer due to error&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>24)	STATUSMESSAGE=&quot;Partial
+transfer due to vanished source files&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>25)
+    	STATUSMESSAGE=&quot;The --max-delete limit stopped deletions&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>30)
+    	STATUSMESSAGE=&quot;Timeout in data send/receive&quot;;;</B></SPAN></FONT></FONT></P>
+<P>       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>35)
+    	STATUSMESSAGE=&quot;Timeout waiting for daemon connection&quot;;;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>	*)	STATUSMESSAGE=&quot;Unknown
+rsync return status $STATUS&quot;;;</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>esac</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>#
+sample of a call to generate event including file to include in
+emails</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>generate_event
+-f $PROGNAME -s e -m &quot;$STATUSMESSAGE - see logfile or mail
+message contents&quot; -e $TEMP_FILE1</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>clean_up</B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B></B></SPAN></FONT></FONT></P>
+<P><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal"><B>exit
+1</B></SPAN></FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western"><FONT FACE="Arial, sans-serif"><FONT SIZE=4><I><B>Debugging
+Levels</B></I></FONT></FONT></H2>
+<P><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal"><FONT FACE="Times New Roman, serif"><FONT SIZE=3>ITS
+for Unix implements debugging levels by calls to generate_event,
+which takes 5 severity levels.</FONT></FONT></P>
+<P STYLE="font-style: normal; font-weight: normal"><FONT FACE="Times New Roman, serif"><FONT SIZE=3>This
+way, the granularity of debugging messages can be controller at run
+time, as per <B>principle 12</B></FONT></FONT></P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western"><I><B>Access to data</B></I></H2>
+<P><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal">Scripts that apply
+<B>principle 5</B> include <B>cifs_rsync</B> which reads it's
+authentication information from files in ITS_DATA</P>
+<P STYLE="font-style: normal; font-weight: normal"><BR><BR>
+</P>
+<P STYLE="font-style: normal; font-weight: normal"><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,256 @@
+#!/bin/bash
+#	-------------------------------------------------------------------
+#
+#	Shell program to implement standardised rsync operations based on parameters.
+#
+#	Copyright 2009, Ben Burke,Sydney Australia,Infrastructure Manager - the Virtualco, ben.burke@internode.on.net.
+#
+#	This program is free software; you can redistribute it and/or
+#	modify it under the terms of the GNU General Public License as
+#	published by the Free Software Foundation; either version 2 of the
+#	License, or (at your option) any later version. 
+#
+#	This program is distributed in the hope that it will be useful, but
+#	WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#	General Public License for more details.
+#
+#	Description:
+#
+#
+#
+#	Usage:
+#
+#		timed_rsync [ -h | --help ] [-s source_path] [-o output_path] [-d]
+#
+#	Options:
+#
+#		-h, --help	Display this help message and exit.
+#		-s  source_path source path - rsync will change dir to this location as source
+#		-o  output_path output_path - destination of the rsync
+#		-d              when d is 'yes', actually run the rsyn. Otherwise do a check pass
+#
+#
+#	Revision History:
+#
+#	8-dec-2009	File created by new_script ver. 2.1.0
+#	4-Jan-2009	Updated to use standard common_functions_library
+#			Removed trap ERR and built case statement around rsync return values
+#			Rsync output directed to TEMP_FILE1. 
+#			Generate event updated to add a files contents to mail message body
+#
+#	-------------------------------------------------------------------
+
+if [ -f  "$ITSCOMMONFUNCTIONS" ];then
+	
+	source $ITSCOMMONFUNCTIONS
+else
+
+	echo "ITSCOMMONFUNCTIONS not defined. Exitting"
+
+	exit 1
+
+fi
+
+
+
+#	-------------------------------------------------------------------
+#	Constants
+#	-------------------------------------------------------------------
+
+#	PROGNAME=$(basename $0)
+# 	PROGNAME is now determined in the common_functions_library
+
+	VERSION="1.0.1"
+
+#	-------------------------------------------------------------------
+
+
+
+# any script specific clean up - will be called by included function clean_up
+
+function local_clean_up
+{
+
+	$gen_info "Local Clean up called"
+	cd $ORIGINAL_DIR
+
+}
+
+
+
+function usage
+{
+
+#	-----------------------------------------------------------------------
+#	Function to display usage message (does not exit)
+#		No arguments
+#	-----------------------------------------------------------------------
+
+	echo "Usage: ${PROGNAME} [-h | --help] [-s source_path] [-o output_path] [-d]"
+}
+
+
+function helptext
+{
+
+#	-----------------------------------------------------------------------
+#	Function to display help message for program
+#		No arguments
+#	-----------------------------------------------------------------------
+
+	local tab=$(echo -en "\t\t")
+
+	cat <<- -EOF-
+
+	${PROGNAME} ver. ${VERSION}
+	This is a program to implement standardised rsync operations based on parameters.
+
+	$(usage)
+
+	Options:
+
+	-h, --help	Display this help message and exit.
+	-s  source_path source path - rsync will change dir to this location as source
+	-o  output_path output_path - destination of the rsync
+	-d              when -d is present, actually run the rsyn. Otherwise do a check pass
+
+	
+	
+-EOF-
+}
+
+
+#	-------------------------------------------------------------------
+#	Program starts here
+#	-------------------------------------------------------------------
+
+##### Initialization And Setup #####
+
+initialise
+
+
+##### Command Line Processing #####
+
+if [ "$1" = "--help" ]; then
+	helptext
+	graceful_exit
+fi
+
+# empty variables to inherit values from the command line 
+SOURCE_PATH=""
+OUTPUT_PATH=""
+
+# Default action is to do test run only - don't actuall copy anything (that's the -n)
+DOIT="-n -i"
+ORIGINAL_DIR="$(pwd)"
+
+while getopts ":hs:o:d" opt; do
+	case $opt in
+		s )	$gen_info "source path - rsync will change dir to this location as source - argument = $OPTARG" 
+			SOURCE_PATH="$OPTARG"
+			;;
+		o )	$gen_info "output_path - destination of the rsync - argument = $OPTARG" 
+			OUTPUT_PATH="$OPTARG"
+			;;
+		d )	$gen_info "d is present, we will actually run the rsync" 
+			DOIT="-i"
+			;;
+		h )	helptext
+			graceful_exit ;;
+		* )	usage
+			clean_up
+			exit 1
+	esac
+done
+
+
+##### Main Logic #####
+
+
+# SOURCE_PATH is a directory - that's about as much checking as we can do
+
+if [ -d "${SOURCE_PATH}" ]; then
+	
+		cd $SOURCE_PATH
+		
+		#working with Mark's advice, all rsync will be executed with . as input spec - get around relative path issues
+		$gen_info "Successfully changed directory to $SOURCE_PATH"
+	else
+
+	$gen_warning "Source Path $SOURCE_PATH is not a directory"
+
+	exit 1
+
+fi
+
+
+# OUTPUT_PATH is a non-blank - since the output path is often remote, can't check too much
+
+if [  "${OUTPUT_PATH}" != "" ]; then
+
+	$gen_info  "Output to $OUTPUT_PATH "
+
+else
+	
+	$gen_warning "$OUTPUT_PATH is not set"
+
+	clean_up
+
+	exit 1
+
+fi
+
+# if we leave the standard ERR trap engaged, we'll fall out through the default error_exit and 
+# loose the context of what went wrong. 
+# Turn it off now and leave it off for the rest of the script
+
+trap - ERR
+
+
+# Will leave debugging output on for the rest of this script during bed in period
+
+set -xv
+
+time rsync $DOIT --no-checksum --no-perms -S -R -a -u -W . $OUTPUT_PATH >  $TEMP_FILE1 2>&1
+
+
+STATUS=$?
+
+# dump the output of rsync command here too, so it ends up in the logfile
+
+cat $TEMP_FILE1
+
+case $STATUS in
+	0)	graceful_exit;;
+	1)	STATUSMESSAGE="Syntax or usage error";;
+	2)      STATUSMESSAGE="Protocol incompatibility";;
+       	3)      STATUSMESSAGE="Errors selecting input/output files, dirs";;
+       	4)      STATUSMESSAGE="Requested action not supported: attempt  made to manipulate 64-bit files on wrong platform";;
+       	5)      STATUSMESSAGE="Error starting client-server protocol";;
+       	6)      STATUSMESSAGE="Daemon unable to append to log-file";;
+       10)     	STATUSMESSAGE="Error in socket I/O";;
+       11)     	STATUSMESSAGE="Error in file I/O";;
+       12)     	STATUSMESSAGE="Error in rsync protocol data stream";;
+       13)     	STATUSMESSAGE="Errors with program diagnostics";;
+       14)     	STATUSMESSAGE="Error in IPC code";;
+       20)     	STATUSMESSAGE="Received SIGUSR1 or SIGINT";;
+       21)     	STATUSMESSAGE="Some error returned by waitpid()";;
+       22)     	STATUSMESSAGE="Error allocating core memory buffers";;
+       23)     	STATUSMESSAGE="Partial transfer due to error";;
+       24)	STATUSMESSAGE="Partial transfer due to vanished source files";;
+       25)     	STATUSMESSAGE="The --max-delete limit stopped deletions";;
+       30)     	STATUSMESSAGE="Timeout in data send/receive";;
+       35)     	STATUSMESSAGE="Timeout waiting for daemon connection";;
+	*)	STATUSMESSAGE="Unknown rsync return status $STATUS";;
+esac
+
+
+# sample of a call to generate event including file to include in emails
+generate_event -f $PROGNAME -s e -m "$STATUSMESSAGE - see logfile or mail message contents" -e $TEMP_FILE1
+
+
+clean_up
+
+exit 1
+

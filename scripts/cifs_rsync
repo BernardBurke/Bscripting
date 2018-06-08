@@ -1,0 +1,248 @@
+#!/bin/bash
+#	-------------------------------------------------------------------
+#
+#	Shell program to implement rsync copy of cifs share.
+#
+#	Copyright 2009, ben.burke@internode.on.net.
+#
+#	This program is free software; you can redistribute it and/or
+#	modify it under the terms of the GNU General Public License as
+#	published by the Free Software Foundation; either version 2 of the
+#	License, or (at your option) any later version. 
+#
+#	This program is distributed in the hope that it will be useful, but
+#	WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#	General Public License for more details.
+#
+#	Description:
+#
+#
+#	NOTE: You must be the superuser to run this script.
+#
+#	Usage:
+#
+#		cifs_rsync [ -h | --help ] [-d DOIT] [-s source_share] [-o output_spec] [-c credentials_file]
+#
+#	Options:
+#
+#		-h, --help	Display this help message and exit.
+#		-d  DOIT{'yes'}        DOIT mode - default is just run a check pass
+#		-s  source_shareSource Share
+#		-o  output_spec Output spec
+#		-c  credentials_file filename
+#		-r  adds the --r switch to the timed_rsync command. The effect is a Cut and Paste of 
+#			source to destination
+#
+#	Revision History:
+#
+#	12/04/2009	File created by new_script ver. 2.1.0
+#	4-Jan-2010	Ben Burke	Updated for common_functions_library
+#	15-Jan-2010	Ben Burke	Added -r switch, for --remove-source-files in timed_rsync
+#
+#	-------------------------------------------------------------------
+#
+#
+#	If include the common_fuctions_library - if this environment variable doesn't point to a file
+#	just give up and exit
+#	
+
+if [ -f  "$ITSCOMMONFUNCTIONS" ];then
+	
+	source $ITSCOMMONFUNCTIONS
+else
+
+	echo "ITSCOMMONFUNCTIONS not defined. Exitting"
+
+	exit 1
+
+fi
+
+#	To Do: Perhaps provide a default, then the entire enviroment would require no external environment variables.
+
+#	-------------------------------------------------------------------
+#	Constants
+#	-------------------------------------------------------------------
+
+#	PROGNAME=$(basename $0)
+# 	PROGNAME is now determined in the common_functions_library
+
+	VERSION="1.0.1"
+
+#	-------------------------------------------------------------------
+#	To Do: Move source to RCS or SVN, and have that tool generate versions
+
+
+#
+# any script specific clean up - will be called by included function clean_up
+
+function local_clean_up
+{
+
+	$gen_info "Local Clean up called"
+
+	unmount_temp_mount $TMPMOUNTPOINT
+}
+
+
+function usage
+{
+
+#	-----------------------------------------------------------------------
+#	Function to display usage message (does not exit)
+#		No arguments
+#	-----------------------------------------------------------------------
+
+	echo "Usage: ${PROGNAME} [-h | --help] [-d {really doit?)] [-s source_share] [-o output_spec] [-c credentials_file]"
+}
+
+
+function helptext
+{
+
+#	-----------------------------------------------------------------------
+#	Function to display help message for program
+#		No arguments
+#	-----------------------------------------------------------------------
+
+	local tab=$(echo -en "\t\t")
+
+	cat <<- -EOF-
+
+	${PROGNAME} ver. ${VERSION}
+	This is a program to implement rsync copy of cifs share.
+
+	$(usage)
+
+	Options:
+
+	-h, --help	Display this help message and exit.
+	-d  DOIT        DOIT mode - default is just run a check pass
+	-s  source_share Source Share
+	-o  output_spec Output spec
+	-c  credentials_file Credentials filename
+	-r  adds the --remove-source-files switch to the timed_rsync call. The effect is a Cut and Paste of source to destination 
+
+	NOTE: You must be the superuser to run this script.
+	
+-EOF-
+}
+
+
+
+#	-------------------------------------------------------------------
+#	Program starts here
+#	-------------------------------------------------------------------
+
+##### Initialization And Setup #####
+
+initialise
+
+
+root_check
+
+
+##### Command Line Processing #####
+
+if [ "$1" = "--help" ]; then
+	helptext
+	graceful_exit
+fi
+
+# default is - don't do anything, just a test pass
+DOIT=""
+CREDENTIALS_FILENAME="$ITSD/rsync_ro_credentials"
+REMOVESOURCE=""
+MOUNTREADONLY="-r"
+CRED_SPECIFIED=""
+
+
+while getopts ":hs:o:c:dr" opt; do
+	case $opt in
+		s )	$gen_info "Source Share $OPTARG" 
+			SOURCE_SHARE="$OPTARG"
+			;;
+		o )	$gen_info "Output Spec  $OPTARG"
+			OUTPUT_SPEC="$OPTARG"
+		 	;;
+		c )	if [ "$OPTARG" != "" ]; then
+				CREDENTIALS_FILENAME="$ITSD/$OPTARG"
+				CRED_SPECIFIED="true"
+			fi
+			$gen_info "Credentials Filename  $OPTARG" 
+			;;
+		d )     DOIT="-d"
+                        $gen_info "DOIT mode selected"
+			;;	
+		r )	REMOVESOURCE="-r"
+			$gen_info "Source files will be removed after being copied"
+			if [ "$CRED_SPECIFIED" != "" ]; then
+                                CREDENTIALS_FILENAME="$ITSD/rsync_rw_credentials"
+                        fi
+			MOUNTREADONLY="-w"
+			;;
+		h )	helptext
+			graceful_exit ;;
+		* )	usage
+			clean_up
+			exit 1
+	esac
+done
+
+
+##### Main Logic #####
+
+# create a temp directory to be the mount point for this execution
+TMPMOUNTPOINT=$(mktemp -d -q "$TEMP_DIR/${PROGNAME}.$$.XXXXXX")
+
+# We will want to cd back here when done
+ORIGINAL_DIR=$(pwd)
+
+
+
+# removing the TRAP for ERR - we need tocheck return status manually for each step here
+
+trap - ERR
+
+mount -v -t cifs $SOURCE_SHARE $TMPMOUNTPOINT -o credentials=$CREDENTIALS_FILENAME $MOUNTREADONLY
+
+
+STATUS="${?}"
+
+if [ $STATUS != 0 ]; then
+	$gen_fatal "Failed to mount $SOURCE_SHARE on $TMPMOUNTPOINT - status $STATUS"
+	clean_up
+	exit 1
+fi
+
+
+# only if a cd to the temporary mount point exists, call timed_rsync
+if [ -d "${TMPMOUNTPOINT}" ]; then
+
+        cd "$TMPMOUNTPOINT"
+
+        $gen_info "change directory successful -- $(pwd)"
+
+	timed_rsync -s $TMPMOUNTPOINT -o $OUTPUT_SPEC $DOIT $REMOVESOURCE
+		
+	RET_STATUS="${?}"
+
+fi
+
+if [ "$RET_STATUS" != 0 ]; then
+
+	# two gen_fatals is probably overkill, but this will catch any accidental returns from timed_rsync
+	$gen_fatal "Call to timed_rsync failed, status $RET_STATUS"
+
+	clean_up
+
+	exit 1
+else
+
+	$gen_info "timed_rsync returned success - happy days"
+
+fi
+
+
+graceful_exit
+

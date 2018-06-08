@@ -1,0 +1,2 @@
+cd /its/scripts
+rsync -i --no-checksum --no-perms -S -R -a -u -W . system@lfst1.dcdel.com.au:/its/scripts/

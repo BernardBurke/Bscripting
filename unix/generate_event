@@ -1,0 +1,157 @@
+#!/bin/bash
+
+#	-------------------------------------------------------------------
+#
+#	Shell program to provide centralised event handling and alerts.
+#
+#	Copyright 2009, root ben.burke@internode.on.net.
+#
+#	This program is free software; you can redistribute it and/or
+#	modify it under the terms of the GNU General Public License as
+#	published by the Free Software Foundation; either version 2 of the
+#	License, or (at your option) any later version. 
+#
+#	This program is distributed in the hope that it will be useful, but
+#	WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#	General Public License for more details.
+#
+#	Description:
+#
+#
+#
+#	Usage:
+#
+#		generate_event.sh [ -h | --help ] [-f facility] [-s severity] [-m message]
+#
+#	Options:
+#
+#		-h, --help	Display this help message and exit.
+#		-f  facility    Facility - normally the name of the caller
+#		-s  severity    severity (i for info, s for success, w for warning, e for error, f for fatal)
+#		-m  message     Message text
+#
+#
+#	Revision History:
+#
+#	12/04/2009	File created by Ben Burke ver. 2.1.0
+#	04-Jan-2009	Removed all new_script template stuff. This script is special - since it's the messaging 
+#			mechanism for all functions, it shouldn't not depend on the common_functions library or
+#			need regeneration after modifications to new_script
+#
+#	-------------------------------------------------------------------
+
+
+#	-------------------------------------------------------------------
+#	Constants
+#	-------------------------------------------------------------------
+
+	PROGNAME=$(basename $0)
+	VERSION="1.0.1"
+
+
+
+#	-------------------------------------------------------------------
+#	Functions
+#	-------------------------------------------------------------------
+
+
+function usage
+{
+
+#	-----------------------------------------------------------------------
+#	Function to display usage message (does not exit)
+#		No arguments
+#	-----------------------------------------------------------------------
+
+	echo "Usage: ${PROGNAME} [-h | --help] [-f facility] [-s severity] [-m message]"
+}
+
+
+function helptext
+{
+
+#	-----------------------------------------------------------------------
+#	Function to display help message for program
+#		No arguments
+#	-----------------------------------------------------------------------
+
+	local tab=$(echo -en "\t\t")
+
+	cat <<- -EOF-
+
+	${PROGNAME} ver. ${VERSION}
+	This is a program to provide centralised event handling and alerts.
+
+	$(usage)
+
+	Options:
+
+	-h, --help	Display this help message and exit.
+	-f  facility    Facility - normally the name of the caller
+	-s  severity    severity (i for info, s for success, w for warning, e for error, f for fatal)
+	-m  message     Message text
+	-e  email	filename to add to email contents
+
+	
+	
+-EOF-
+}
+
+
+#	-------------------------------------------------------------------
+#	Program starts here
+#	-------------------------------------------------------------------
+
+
+
+##### Command Line Processing #####
+
+if [ "$1" = "--help" ]; then
+	helptext
+	exit 0
+fi
+
+##### Main Logic #####
+
+
+while getopts ":hf:s:m:e:" opt; do
+	case $opt in
+		f )	FACILITY=$OPTARG;;
+		s )	SEVERITY=$OPTARG;;
+		m )	MESSAGE=$OPTARG;;
+		e )	MESSAGEFILE=$OPTARG;;
+		h )	helptext;;
+		* )	usage
+			clean_up
+			exit 1
+	esac
+done
+
+MESSAGE_STRING="$(date +%F:%T)[$HOSTNAME][$FACILITY][$SEVERITY]--->$MESSAGE"
+
+WHATTOMAIL="echo $MESSAGE_STRING"
+
+$WHATTOMAIL
+
+if [ -f "$MESSAGEFILE" ]; then
+
+	WHATTOMAIL="cat $MESSAGEFILE"
+
+fi
+
+$WHATTOMAIL
+
+case $SEVERITY in
+	i )	;;
+	s )     ;;
+	w )     $WHATTOMAIL | mailx -v -v -v -s "$MESSAGE_STRING" support;;
+	e )     $WHATTOMAIL | mailx -v -v -v -s "$MESSAGE_STRING" support;;
+	f )     $WHATTOMAIL | mailx -v -v -v -s "$MESSAGE_STRING" support;;
+	* )	echo "Error parsing Severity--$SEVERITY---->$MESSAGE_TEXT";;
+esac
+
+exit 0
+
+
+
