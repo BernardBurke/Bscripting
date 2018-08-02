@@ -1,3 +1,0 @@
-username=ben
-password=Letsparty44
-domain=MACLEAY_STREET
