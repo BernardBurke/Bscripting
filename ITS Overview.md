@@ -29,8 +29,7 @@
  
 
 
-**ITS
-Environment**
+**ITS Environment**
 
 
   
@@ -65,97 +64,76 @@ It is intended to release some parts of the ITS environment to the
 Open Source community.
 
 
-# 1Principles
+#  Principles
 
 
 While the Unix and Windows versions of ITS are not identical, they
-are built with the following **principles** in mind.
+are built with the following **principles** in mind
 
 
-  
-  
+ordered list
 
-
-
-
-1. The
- file system that implements ITS should **separate
+1. The file system that implements ITS should **separate
  code, data and logfiles.**
  This allows us to logically separate generally read only files from
  scratch areas, giving file access privileges as required.
 
-- The scripting environment should
+2. The scripting environment should
  **use relative file system paths**. As the first principle
  forbids the use of hard coded variables, this principle indicates
  that there should no hard-coded file system paths in any script.
  Unix and Windows provide environment variables which which can
  replace all or part of a file specification.
 
-- If a function or procedure is
+3. If a function or procedure is
  called from more than once, **the common function should be
  included from a library.** 
 
 
-- All
- scripts should be based on a **standard template.**
+4. All scripts should be based on a **standard template.**
  A standard template will allow developers to become productive
  quickly. The template should only contain code that does *not*
  exist in a common function library.
 
-- The
- scripting environment should be **data
- driven.** 
- Scripts should be developed and tested away from production
+5. The scripting environment should be **data
+ driven.** Scripts should be developed and tested away from production
  environments. When customisation is needed in a production
  environment, this customisation should be achieved by modifying
  tables of data that are read by scripts. We should never alter a
  scripts contents in production environments.
 
-- Scripts
- should employ **common
- logging and alerting**
+6. Scripts
+ should employ **common logging and alerting**
  methods. As most scripts are not run interactively, locating and
  interpreting their output should be easy. When failures occur that
  require attention, standard means should be available to notify
  support staff. 
 
 
-- Scripts
- should employ **in-line
- error handling**
- where ever possible and **provide
- a default error handler**
- as a catch all.
+7. Scripts should employ **in-line
+ error handling** where ever possible and **provide
+ a default error handler** as a catch all.
 
-- Scripts
- should contain sufficient comments to **generate
+8. Scripts should contain sufficient comments to **generate
  their own documentation**.
  
-
-
-- Where
- possible, scripts should be written in a **standard
- shell or language**.
- On Windows, the Windows Scripting Host environment is used, which
+9. Where possible, scripts should be written in a **standard
+ shell or language**.  On Windows, the Windows Scripting Host environment is used, which
  all code written in VBScript. Experience indicates that Microsoft
  Power Shell is still many years away from supplanting VBScript. On
  Unix, the Bourne again shell (bash) was chosen as a preferred shell
  on various distos of Linux.
 
-- Script
- filenames should be **as
- descriptive as possible**.
+10. Script
+ filenames should be **as descriptive as possible**.
  Where a script serves several purposes, file system links should
  represent the variations.
 
-- Scripts
- should have a **standard
+11. Scripts should have a **standard
  means of collecting command line arguments.**
 
-- Scripts
- should be capable of writing **verbose
- debugging messages** as
- required, with the level of verbosity being adjustable at run time.
+12. Scripts should be capable of writing **verbose
+ debugging messages** as required, with the level of verbosity being adjustable at run time.
 
 
 
