@@ -267,22 +267,18 @@ at the beginning of a standard script:
 
 - Static
  Data Definitions. A scripting environment will require various
- **constants**
- and other variables that always have the same value. This file
+ **constants** and other variables that always have the same value. This file
  contains those definitions.
 
 - Dynamic
  Data Definitions. Scripts will require variables that are set at run
  time, prior to mainline initialisation. An example is the **username**
  of the process executing the script, which unknown until execution.
- Further, the **environment
- variables**  that
- implement **principle 2**
- are set as dynamic data.
+ Further, the **environment variables**  that
+ implement **principle 2** are set as dynamic data.
 
 - Common
- Functions Library. Implementing **principle
- 3,**  this statement
+ Functions Library. Implementing **principle 3,**  this statement
  includes a set of functions used by many scripts.
 
 - The  last tag indicates that the entire module is written in Vbscript.
@@ -292,23 +288,14 @@ at the beginning of a standard script:
 ## Initialisation
 
 
-  
-  
-
-
-
-
 As any script begins execution, local constants and variables are declared immediately
 after the Includes section.
 
 
   
-  
 
 
-
-
-The very first procedure called by any script is a subroutine in commonfunctionslibrary called
+The very first procedure called by any script is a subroutine in **commonfunctionslibrary** called
 **initialise().**
 
 
@@ -321,13 +308,9 @@ a **log file name**, of the form ITS\_LOG\**scriptname\_username\_yyyymmddmmhhss
 
 
 All subsequent script output is written to this logfile by the **message**
-common subroutine. The **message**
-subroutine calls **logger**
-common function. **Logger**creates a **log
-file**  as required and
-appends all **message**output to this **log
-file**, along with an
-execution timestamp.
+common subroutine. The **message** subroutine calls **logger**
+common function. **Logger**creates a **log file**  as required and appends all **message**output to this **log
+file**, along with an execution timestamp.
 
 
   
@@ -336,11 +319,8 @@ execution timestamp.
 
 
 
-These
-routines implement **principle
-6** via the first
-examples of **principle
-3**.
+These routines implement **principle 6** via the first
+examples of **principle 3**.
 
 
   
@@ -349,8 +329,8 @@ examples of **principle
 
 
 
-## **Error
-Handling**
+## **Error Handling **
+
 
 
   
@@ -359,28 +339,19 @@ Handling**
 
 
 
-**VBScript**
-has quite simplistic error handling. One of two error handling **modes**
+**VBScript** has quite simplistic error handling. One of two error handling **modes**
 are in effect:
 
 
   
   
 
-
-
-
-1. **On error goto 0 -** 
- this is the default mode, where any run-time error causes an
+- **On error goto 0**  this is the default mode, where any run-time error causes an
  exception which will cause the script to exit. Upon exit, WSH will
- print the exception details and a **line
- number**,
- giving a trouble-shooter a starting point to debug a problem.
+ print the exception details and a **line  number**,  giving a trouble-shooter a starting point to debug a problem.
 
-- **On error resume next -** 
- in this mode, the script processor ignores run time errors. The
- developer must examine the **err**
- object and make a programmatic decision on how to handle the error
+- **On error resume next** in this mode, the script processor ignores run time errors. The
+ developer must examine the **err** object and make a programmatic decision on how to handle the error
 
 
 
@@ -392,11 +363,8 @@ are in effect:
 
 
 
-What
-this means in practice, is we cannot satisfy all of **principle
-7**
-as Vbscript has no concept of a user-defined default error handler.
-It is possible that any script could simply “fail” and it is
+What this means in practice, is we cannot satisfy all of **principle 7**
+as Vbscript has no concept of a user-defined default error handler. It is possible that any script could simply “fail” and it is
 difficult to even log the event that lead to failure.
 
 
@@ -406,94 +374,57 @@ difficult to even log the event that lead to failure.
 
 
 
-Strictly
-speaking, any program statement that *could*
-fail should be wrapped in a code block such as:
+Strictly speaking, any program statement that *could* fail should be wrapped in a code block such as:
 
 
- on
-error resume next
-
-
-
+ ```
+ on error resume next
  '
 Create HTTP object
 
 
+ Set Http = CreateObject("Microsoft.XmlHttp")
 
- Set
-Http = CreateObject("Microsoft.XmlHttp")
-
-
-
- if
-err.number <> 0 then
+ if err.number <> 0 then message "Failed to create MS XMLHTTP object"
 
 
+ on error goto 0
 
- message
-"Failed to create MS XMLHTTP object"
-
-
-
- on
-error goto 0
+exit function
 
 
+end if
 
-
- exit
-function
-
-
-
- end
-if
-
-
+```
   
   
 
 
 
 
-As
-you can imagine, this could make any code extremely voluminous and
+As you can imagine, this could make any code extremely voluminous and
 provide a high likelihood that an error may be missed. We must accept
 this limitations of Vbscript and find a compromise in this behaviour
 through a general approach.
-
-
   
   
 
 
 
 
-In
-the above example, the code snippet will perform an **exit
-function**
-when an error condition exists. Throughout the ITS environment,
+In the above example, the code snippet will perform an **exit
+function** when an error condition exists. Throughout the ITS environment,
 function calls are generally checked as follows:
 
 
-  
-  
+```
+If not FuctionName(p1,p2) then 
 
-
-
-
- If
-not FuctionName(p1,p2) then 
-
-
-
- '
 do something
 
 
  ...
-
+```
 
  
 
@@ -504,14 +435,13 @@ do something
 
 
 
-Within
-any function, the general approach is to do in-line error handling in
+Within any function, the general approach is to do in-line error handling in
 a granular fashion, and use Boolean function returns similar to:
 
 
  
 
-
+```
  on
 error resume next
 
@@ -547,28 +477,22 @@ at the end of the function, set a return value
 
  end
 function
+```
 
-
-This
-approach provides a reasonable compromise with the available error
+This approach provides a reasonable compromise with the available error
 handling methods.
 
 
-##### 
 
 
-## ***Creating
-a new script***
+## Creating a new script
 
 
   
   
 
 
-
-
-All
-new scripts should be created from a standard template, as stated in
+All new scripts should be created from a standard template, as stated in
 **principle 4**.
 
 
@@ -578,35 +502,27 @@ new scripts should be created from a standard template, as stated in
 
 
 
-This
-script is customised by a utility called **newscript.vbs**,
-which *does not*
-comply to all the other principles, but simply enforces **principle
-4**
-on all new scripts. 
-
+This script is customised by a utility called **newscript.vbs**,
+which *does not* comply to all the other principles, but simply enforces **principle
+4** on all new scripts. 
 
 
   
-  
 
 
 
 
-Here
-is the current template WSF file, which contains comment templates
-(providing the building blocks for **principle
-8**),
+Here is the current template WSF file, which contains comment templates
+(providing the building blocks for **principle 8**),
 file includes, initialisation and command line argument handling (as
-specified in **principle
-11)**
+specified in **principle 11)**
 
 
   
   
 
 
-
+```
 
 <job
 id="script\_name\_token">
@@ -1232,13 +1148,7 @@ Description here.
 
 
 </job>
-
-
-
-  
-  
-
-
+```
 
 
   
@@ -1253,10 +1163,14 @@ Description here.
 
 
 
-The
-above script template contains the string “token” in several
-places. The **newscript.vbs**utility
-replaces these tokens with some calculated and prompted equivalences.
+  
+  
+
+
+
+
+The above script template contains the string “token” in several
+places. The **newscript.vbs**utility replaces these tokens with some calculated and prompted equivalences.
 
 
 
@@ -1284,8 +1198,8 @@ is the **newscript**utility:
 
 
 
-
-'Newscript
+```
+Newscript 
 - read a template and fill in some blanks by asking some questions
 
 
@@ -1588,7 +1502,7 @@ YourAPieceOfstring
 
 end
 sub
-
+```
 
 
 
@@ -1601,8 +1515,7 @@ sub
 
 
 
-## ***Debugging
-Levels***
+## Debugging Levels
 
 
   
@@ -1611,8 +1524,7 @@ Levels***
 
 
 
-A
-new script contains one standard command line argument, **debug**.
+A new script contains one standard command line argument, **debug**.
 This argument is parsed into a variable, which is examined by the
 **debugwrite**  common subroutine. Calls to the **debugwrite**
 routine look as follows:
@@ -1623,26 +1535,22 @@ routine look as follows:
 
 
 
-
- debugwrite
-2, “Now doing action blah blah”
-
-
-  
-  
+```
+ debugwrite 2, “Now doing action blah blah”
+ ```
+ 
 
 
+ 
 
 
-When
-the **debug** command line argument is set to 2 or higher,
+When the **debug** command line argument is set to 2 or higher,
 **debugwrite** will call the **message** routine, passing the
 second argument. 
 
 
 
-This
-way, the granularity of debugging messages can be controller at run
+This way, the granularity of debugging messages can be controller at run
 time, as per **principle 12**
 
 
@@ -1652,7 +1560,7 @@ time, as per **principle 12**
 
 
 
-## ***Access to data***
+## Access to data
 
 
   
@@ -1661,8 +1569,7 @@ time, as per **principle 12**
 
 
 
-Many
-implementations based on the ITS environment make extensive use of
+Many implementations based on the ITS environment make extensive use of
 the Activex Data Object known as a record set.
 
 
@@ -1672,8 +1579,7 @@ the Activex Data Object known as a record set.
 
 
 
-The common
-functions library contains functions to connect to various data
+The common functions library contains functions to connect to various data
 sources, which include excel spreadsheets, CONNIX data sources,
 MS-SQL databases and Active Directory objects.
 
@@ -1684,8 +1590,7 @@ MS-SQL databases and Active Directory objects.
 
 
 
-Scripts that apply
-**principle 5** can use the MakeRecordSet function along with the
+Scripts that apply **principle 5** can use the MakeRecordSet function along with the
 specific connection routines to access tabular data. (The standard
 File System Object can be used to read text files that contain data)
 
@@ -1702,7 +1607,7 @@ File System Object can be used to read text files that contain data)
 
 
 
-# 3ITS on Unix
+# ITS on Unix
 
 
 The ITS environment was developed on Ubuntu Lucid Lynx (10.4) and
