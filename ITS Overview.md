@@ -252,7 +252,8 @@ at the beginning of a standard script:
 **<script language="VBScript" src="CommonFunctionsLibrary5.vbs"/>**
 
 
-**<script language="VBScript">**```
+**<script language="VBScript">**
+```
 
 
   
