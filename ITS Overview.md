@@ -208,21 +208,7 @@ be used to run multiple environments on a given platform
 
 The above structure implements **principle 1.**
 
-
-  
-  
-
-
-
-
 ## **Run time environment**
-
-
-  
-  
-
-
-
 
 **Vbscript**  is made available by the Windows Script Host (WSH) environment, which has
 been available on Windows for over many years. 
@@ -442,41 +428,28 @@ a granular fashion, and use Boolean function returns similar to:
  
 
 ```
- on
-error resume next
+on error resume next
 
 
- '
-do something
+' do something
 
 
- '
-then check err object
+' then check err object
 
 
- if
-err.number <> 0
+if err.number <> 0
 
 
- '
-exit the function with no return value (false)
+'exit the function with no return value (false)
 
 
-  
+  ' at the end of the function, set a return value
 
 
+FunctionName = True
 
 
- '
-at the end of the function, set a return value
-
-
- FunctionName
-= True
-
-
- end
-function
+end function
 ```
 
 This approach provides a reasonable compromise with the available error
@@ -496,30 +469,16 @@ All new scripts should be created from a standard template, as stated in
 **principle 4**.
 
 
-  
-  
-
-
-
-
 This script is customised by a utility called **newscript.vbs**,
 which *does not* comply to all the other principles, but simply enforces **principle
 4** on all new scripts. 
 
 
   
-
-
-
-
 Here is the current template WSF file, which contains comment templates
 (providing the building blocks for **principle 8**),
 file includes, initialisation and command line argument handling (as
 specified in **principle 11)**
-
-
-  
-  
 
 
 ```
@@ -553,102 +512,85 @@ language="VBScript">
 ==============================================================================
 
 
-
-
-'
-Script.........: [script\_name\_token.wsf] 
+' Script.........: [script\_name\_token.wsf] 
 
 
 
-'
-Author.Email...: [ben.burke@internode.on.net] 
+' Author.Email...: [ben.burke@internode.on.net] 
 
 
 
-'
-Version........: 1.0 
+' Version........: 1.0 
 
 
 
-'
-Date Written...........: date\_token
+' Date Written...........: date\_token
 
 
 
 '
 
+' One Line Description: one\_line\_token
 
 
-'
-One Line Description: one\_line\_token
+' For Detailed Description and revision history, go to end of file 
 
 
 
-'
- 
+' (this saves the interpreter from 'reading' the comments.
 
 
 
-'
 
+Option Explicit 
 
 
 
-'
-For Detailed Description and revision history, go to end of file 
+On Error Goto 0 
 
 
+' --------------------------------------------------------------------------
 
-'
-(this saves the interpreter from 'reading' the comments.
 
 
 
+'  Declare Constants 
 
-Option
-Explicit 
 
 
+' --------------------------------------------------------------------------
 
-On
-Error Goto 0 
 
 
 
+' --------------------------------------------------------------------------
 
 
 
 
-'
---------------------------------------------------------------------------
+'  Declare Variables 
 
 
 
+' --------------------------------------------------------------------------
 
-'
- Declare Constants 
 
 
 
-'
---------------------------------------------------------------------------
 
 
 
 
-'
---------------------------------------------------------------------------
+' --------------------------------------------------------------------------
 
 
 
 
-'
- Declare Variables 
+'  Do something 
 
 
 
-'
---------------------------------------------------------------------------
+' --------------------------------------------------------------------------
 
 
 
@@ -657,33 +599,11 @@ Error Goto 0
 
 
 
-'
---------------------------------------------------------------------------
 
 
 
 
-'
- Do something 
-
-
-
-'
---------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-initialise
-
+initialise 
 
 
 
@@ -706,50 +626,41 @@ Main
 
 
 
-'
---------------------------------------------------------------------------
+' --------------------------------------------------------------------------
 
 
 
 
-'
---------------------------------------------------------------------------
+' --------------------------------------------------------------------------
 
 
 
 
-'
- Subroutine.....: 
+'  Subroutine.....: 
 
 
 
-'
- Purpose........: 
+'  Purpose........: 
 
 
 
-'
- Arguments......: 
+'  Arguments......: 
 
 
 
-'
- Example........: 
+'  Example........: 
 
 
 
-'
- Requirements...: 
+'  Requirements...: 
 
 
 
-'
- Notes..........: 
+'  Notes..........: 
 
 
 
-'
---------------------------------------------------------------------------
+' --------------------------------------------------------------------------
 
 
 
@@ -758,8 +669,7 @@ Main
 
 
 
-sub
-Main
+sub Main
 
 
 
@@ -767,8 +677,7 @@ Main
 
 
 
-end
-sub
+end sub
 
 
 
@@ -776,50 +685,41 @@ sub
 
 
 
-'
---------------------------------------------------------------------------
+' --------------------------------------------------------------------------
 
 
 
 
-'
---------------------------------------------------------------------------
+' --------------------------------------------------------------------------
 
 
 
 
-'
- Subroutine.....: 
+'  Subroutine.....: 
 
 
 
-'
- Purpose........: 
+'  Purpose........: 
 
 
 
-'
- Arguments......: 
+'  Arguments......: 
 
 
 
-'
- Example........: 
+'  Example........: 
 
 
 
-'
- Requirements...: 
+'  Requirements...: 
 
 
 
-'
- Notes..........: 
+'  Notes..........: 
 
 
 
-'
---------------------------------------------------------------------------
+' --------------------------------------------------------------------------
 
 
 
@@ -840,39 +740,32 @@ sub
 
 
 
-'
- Subroutine.....: CommandLineArgs
+'  Subroutine.....: CommandLineArgs
 
 
 
-'
- Purpose........: Turn Command line arguements into variables
+'  Purpose........: Turn Command line arguements into variables
 
 
 
-'
- Arguments......: None
+'  Arguments......: None
 
 
 
-'
- Example........: 
+'  Example........: 
 
 
 
-'
- Requirements...: Variables need to be declared in higher scope
+'  Requirements...: Variables need to be declared in higher scope
 
 
 
-'
- Notes..........: Plan to generalise this and move to function
+'  Notes..........: Plan to generalise this and move to function
 library
 
 
 
-'
---------------------------------------------------------------------------
+' --------------------------------------------------------------------------
 
 
 
@@ -881,8 +774,7 @@ library
 
 
 
-Sub
-CommandLineArgs()
+Sub CommandLineArgs()
 
 
 
@@ -890,8 +782,7 @@ CommandLineArgs()
 
 
 
- dim
-NamedArgs 
+ dim NamedArgs 
 
 
 
@@ -903,8 +794,7 @@ NamedArgs
 
 
 
- set
-NamedArgs = wscript.arguments.named
+ set NamedArgs = wscript.arguments.named
 
 
 
@@ -920,226 +810,151 @@ NamedArgs = wscript.arguments.named
 
 
 
- if
-NamedArgs.exists("debug") then
+if NamedArgs.exists("debug") then
 
 
 
 
+debuglevel = NamedArgs.item("debug")
 
 
 
 
+ message "Debuglevel set to " & debuglevel
 
 
 
+end if 
 
 
 
 
- debuglevel
-= NamedArgs.item("debug")
 
 
 
+end sub
 
 
 
 
- message
-"Debuglevel set to " & debuglevel
 
 
 
+' --------------------------------------------------------------------------
 
 
 
 
+' --------------------------------------------------------------------------
 
 
 
 
+'  Function.......: function\_name
 
 
 
+'  Purpose........: 
 
- end
-if 
 
 
+'  Arguments......: 
 
 
 
+'  Returns.........:
 
 
-end
-sub
 
+'  Example........: 
 
 
 
+'  Requirements...: 
 
 
 
-'
---------------------------------------------------------------------------
+'  Notes..........: 
 
 
 
+' --------------------------------------------------------------------------
 
-'
---------------------------------------------------------------------------
 
 
 
 
-'
- Function.......: function\_name
 
 
 
-'
- Purpose........: 
+' ==============================================================================
 
 
 
-'
- Arguments......: 
 
+'  End Of Script 
 
 
-'
- Returns.........:
 
+' ==============================================================================
 
 
-'
- Example........: 
 
 
+'  Description....: ' script\_name\_token.vbs
 
-'
- Requirements...: 
 
-
-
-'
- Notes..........: 
-
-
-
-'
---------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-'
-==============================================================================
-
-
-
-
-'
- End Of Script 
-
-
-
-'
-==============================================================================
-
-
-
-
-'
- Description....: ' script\_name\_token.vbs
-
-
-
-'
  
+'  
 
 
 
-' Lengthy
-Description here.
+' Lengthy Description here.
+
+
+'  Notes..........: 
 
 
 
-'
- 
+'  
 
 
 
-
-'
- 
+'  Customize......: 
 
 
 
-'
- Notes..........: 
-
-
-
-'
- 
-
-
-
-'
- Customize......: 
-
-
-
-'
-==============================================================================
+' ==============================================================================
 
 
 
 
-'
- Revised By.....: 
+'  Revised By.....: 
 
 
 
-'
- Email..........: 
+'  Email..........: 
 
 
 
-'
- Revision Date..: 
+'  Revision Date..: 
 
 
 
-'
- Revision Notes.: 
+'  Revision Notes.: 
 
 
 
-'
- 
+'   
 
 
 
-'
-==============================================================================
+' ==============================================================================
 
 
 
 
-'
-==============================================================================
-
-
-
-
-
+' ==============================================================================
 
 
 
@@ -1204,23 +1019,19 @@ Newscript
 
 
 
-option
-explicit 
+option explicit 
 
 
 
-Dim
-fso
+Dim fso
 
 
 
-dim
-oFile
+dim oFile
 
 
 
-dim
-i
+dim i
 
 
 
@@ -1228,8 +1039,7 @@ i
 
 
 
-const
-template="templatev5.wsf"
+const template="templatev5.wsf"
 
 
 
@@ -1245,8 +1055,7 @@ main
 
 
 
-sub
-main
+sub main
 
 
 
@@ -1254,77 +1063,34 @@ main
 
 
 
- dim
-tso1
+dim tso1
 
 
 
- dim
-tso2
+dim tso2
 
 
 
- dim
-userArray
+dim userArray
 
 
 
- dim
-newscriptname
+dim newscriptname
 
 
-
- dim
-oneliner
+dim oneliner
 
 
+dim YourAPieceOfString
 
- dim
-YourAPieceOfString
+set FSO = wscript.createobject("scripting.filesystemobject")
 
-
-
-
+if fso.fileexists(template) then
 
 
+ set tso1 = fso.opentextfile(template)
 
-
-
-
-
- set
-FSO = wscript.createobject("scripting.filesystemobject")
-
-
-
-
-
-
-
- if
-fso.fileexists(template) then
-
-
-
-
-
-
-
- set
-tso1 = fso.opentextfile(template)
-
-
-
-
-
-
-
- YourAPieceOfString
-= tso1.readall
-
-
-
-
+ YourAPieceOfString = tso1.readall
 
 
 
@@ -1332,83 +1098,29 @@ tso1 = fso.opentextfile(template)
 
 
 
-
-
-
-
- set
-tso1 = nothing
-
-
-
-
-
-
+set tso1 = nothing
 
  else
 
 
 
+wscript.echo "Can't find " & template
+
+end if
+
+
+newscriptname = inputbox ("New script name (no extenstions)-->", "Create a new script")
+
+
+if newscriptname = "" then exit sub
 
 
 
-
- wscript.echo
-"Can't find " & template
+newscriptname = newscriptname & ".wsf"
 
 
 
-
-
-
-
- end
-if
-
-
-
-
-
-
-
-
-
-
-
- newscriptname
-= inputbox ("New script name (no extenstions)-->",
-"Create a new script")
-
-
-
-
-
-
-
- if
-newscriptname = "" then exit sub
-
-
-
-
-
-
-
- newscriptname
-= newscriptname & ".wsf"
-
-
-
-
-
-
-
-
-
-
-
- if
-fso.fileexists(newscriptname) then
+if fso.fileexists(newscriptname) then
 
 
 
@@ -1427,13 +1139,7 @@ if
 
 
 
-
-
-
-
- oneliner
-= inputbox ("Enter a very brief description-->", "One
-Line description")
+oneliner = inputbox ("Enter a very brief description-->", "One Line description")
 
 
 
@@ -1441,67 +1147,30 @@ Line description")
 
 
 
- YourAPieceOfString
-= replace(YourAPieceOfString,"script\_name\_token",
-newscriptname)
+YourAPieceOfString = replace(YourAPieceOfString,"script\_name\_token", newscriptname)
 
 
 
- YourAPieceOfString
-= replace(YourAPieceOfString,"date\_token", now())
+YourAPieceOfString = replace(YourAPieceOfString,"date\_token", now())
 
 
 
- YourAPieceOfString
-= replace(YourAPieceOfString,"one\_line\_token", oneliner)
+YourAPieceOfString = replace(YourAPieceOfString,"one\_line\_token", oneliner)
+
+wscript.echo "Creating " & newscriptname
 
 
 
+set tso2 = fso.createtextfile(newscriptname)
+
+
+tso2.write YourAPieceOfstring
 
 
 
+tso2.close
 
- wscript.echo
-"Creating " & newscriptname
-
-
-
-
-
-
-
- set
-tso2 = fso.createtextfile(newscriptname)
-
-
-
-
-
-
-
- tso2.write
-YourAPieceOfstring
-
-
-
-
-
-
-
- tso2.close
-
-
-
-
-
-
-
-
-
-
-
-end
-sub
+end sub
 ```
 
 
@@ -1648,7 +1317,7 @@ ITS on unix uses the following environment variables:
 To deploy ITS on a unix platform, one should create a directory
 hierarchy similar to the following:
 
-
+```
 /its
 
 
@@ -1663,7 +1332,7 @@ hierarchy similar to the following:
 
 /its/env ' optional
 
-
+```
   
   
 
@@ -1680,13 +1349,12 @@ follow:
 
 
 
-
+```
 #!/bin/bash
 
 
 
-if [ "$ITSROOT"
-= "" ]; then
+if [ "$ITSROOT" = "" ]; then
 
 
 
@@ -1698,8 +1366,7 @@ fi
 
 
 
-if [ "$DEBUG"
-= "true" ]; then
+if [ "$DEBUG" = "true" ]; then
 
 
 
@@ -1715,27 +1382,19 @@ fi
 
 
 
-export
-ITSS=$ITSROOT/scripts
+export ITSS=$ITSROOT/scripts
 
 
 
-export
-ITSL=$ITSROOT/logs
+export ITSL=$ITSROOT/logs
 
 
 
-export
-ITSD=$ITSROOT/data
+export ITSD=$ITSROOT/data
 
 
 
-export
-ITSE=$ITSROOT/env
-
-
-
-
+export ITSE=$ITSROOT/env
 
 
 
@@ -1743,8 +1402,7 @@ PATH="$PATH:$ITSS"
 
 
   
-  
-
+```
 
 
 
@@ -1757,11 +1415,10 @@ The above structure implements **principle 1.**
 
 
 
-## **Run time environment**
+## Run time environment
 
 
-Since
-various Unix implementations and shells have different means of 
+Since various Unix implementations and shells have different means of 
 implementing run commands (.rc files for a shell), an environment
 setup independent of platform is required.
 
@@ -1885,28 +1542,23 @@ subsequent script output is written to stdout by the **generate\_event**script, 
 following aliases:
 
 
- gen\_info="generate\_event
--f $PROGNAME -s i -m"
+ gen\_info="generate\_event -f $PROGNAME -s i -m"
 
 
 
- gen\_success="generate\_event
--f $PROGNAME -s s -m"
+ gen\_success="generate\_event -f $PROGNAME -s s -m"
 
 
 
- gen\_warning="generate\_event
--f $PROGNAME -s w -m"
+ gen\_warning="generate\_event -f $PROGNAME -s w -m"
 
 
 
- gen\_error="generate\_event
--f $PROGNAME -s e -m"
+ gen\_error="generate\_event -f $PROGNAME -s e -m"
 
 
 
- gen\_fatal="generate\_event
--f $PROGNAME -s f -m"
+ gen\_fatal="generate\_event -f $PROGNAME -s f -m"
 
 
   
@@ -1915,86 +1567,50 @@ following aliases:
 
 
 
-These
-aliases implement **principle
-6** via the first
-examples of **principle
+Thesealiases implement **principle
+6** via the first examples of **principle
 3**.
 
 
-## **Error
-Handling**
+## Error Handling
 
 
-  
-  
-
-
-
-
-Bourne
-again shell provides a **trap**
+Bourne again shell provides a **trap**
 statement that can be used to invoke a function upon receipt of
 various signals (NOHUP, INT) or the ERR signal.
 
-
-  
-  
+Inline error handling should be dealt with by suppressing the **trap** for ERR as follows:
 
 
+```
+# turn off default handler
 
 
-Inline
-error handling should be dealt with by suppressing the **trap** for ERR as follows:
+trap -ERR
 
 
-  
-  
+# do something and do inline checking of return status (${?})
 
 
+# turn back on default handler
 
 
-# turn
-off default handler
-
-
-trap
--ERR
-
-
-# do
-something and do inline checking of return status (${?})
-
-
-# turn
-back on default handler
-
-
-trap
-"error\_exit ERR" ERR
-
-
-  
+trap "error\_exit ERR" ERR
+```
+ 
   
 
 
 
 
-The
-common functions library provides a default error handler that will
-use standard **generate\_event**
-calls to communicate error conditions, satisfying all of **principle
+The common functions library provides a default error handler that will
+use standard **generate\_event** calls to communicate error conditions, satisfying all of **principle
 7.**
 
 
-  
-  
 
 
-
-
-## ***Creating
-a new script***
+## ***Creating a new script***
 
 
   
@@ -2003,8 +1619,7 @@ a new script***
 
 
 
-All
-new scripts should be created from a standard template, as stated in
+All new scripts should be created from a standard template, as stated in
 **principle 4**.
 
 
@@ -2014,8 +1629,7 @@ new scripts should be created from a standard template, as stated in
 
 
 
-At
-the time of writing, the **newscript**bash
+At the time of writing, the **newscript**bash
 script is incomplete. Instead of a template, here is an example
 script, **timed\_rsync**
 
@@ -2025,18 +1639,15 @@ script, **timed\_rsync**
 
 
 
-
-**#!/bin/bash**
+#!/bin/bash
 
 
 **# -------------------------------------------------------------------**
 
 
-**#**
 
 
-**# Shell
-program to implement standardised rsync operations based on
+**# Shell program to implement standardised rsync operations based on
 parameters.**
 
 
