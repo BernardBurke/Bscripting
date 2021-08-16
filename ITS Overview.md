@@ -159,7 +159,7 @@ ordered list
 
 
 
-# 2ITS on Microsoft Windows
+# ITS on Microsoft Windows
 
 
 The ITS environment for windows is written for Win2k3 and later on
@@ -171,14 +171,15 @@ servers, XP and later on desktops.
 
 ITS on windows uses the following environment variables:
 
+ordered list
 
 1. ITS\_PROCEDURES – refers to where scripts are deployed to
  and executed from.
 
-- ITS\_DATA – refers to any input or output data that a script
+2. ITS\_DATA – refers to any input or output data that a script
  reads or writes.
 
-- ITS\_LOG - is a scratch area where logfiles are written.
+3. ITS\_LOG - is a scratch area where logfiles are written.
 
 
 
@@ -189,21 +190,18 @@ To deploy ITS on a windows platform, one should create System
 Environment variables similar to the following example:
 
 
-ITS\_DATA=c:\its\its\_data
+- ITS\_DATA=c:\its\its\_data
 
 
-ITS\_LOG=c:\its\its\_log
+- ITS\_LOG=c:\its\its\_log
 
-
-ITS\_PROCEDURES=c:\its\its\_procedures
+- ITS\_PROCEDURES=c:\its\its\_procedures
 
 
 Note: Windows supports Process Environment variables which could
 be used to run multiple environments on a given platform
 
-
-  
-  
+ 
 
 
 
@@ -226,28 +224,15 @@ The above structure implements **principle 1.**
 
 
 
-**Vbscript**  is made
-available by the Windows Script Host (WSH) environment, which has
-been available on Windows for over 10 years. 
-
-
-
-  
-  
+**Vbscript**  is made available by the Windows Script Host (WSH) environment, which has
+been available on Windows for over many years. 
 
 
 
 
-Earlier versions of WSH lacked
-the capability to Include external modules. The ITS environment uses
+Earlier versions of WSH lacked the capability to Include external modules. The ITS environment uses
 the Windows Script File (.WSF) method of executing script, which uses
-XML tags to control execution and allows inclusion of external
-modules.
-
-
-  
-  
-
+XML tags to control execution and allows inclusion of external modules.
 
 
 
@@ -255,30 +240,19 @@ Here is a sample of the WSF XML
 at the beginning of a standard script:
 
 
-  
-  
+```**<job id="sms2group.wsf">**
 
 
+**<script language="VBScript" src="StaticDataDefinitions5.vbs"/>**
 
 
-**<job
-id="sms2group.wsf">**
+**<script language="VBScript" src="DynamicDataDefinitions5.vbs"/>**
 
 
-**<script
-language="VBScript" src="StaticDataDefinitions5.vbs"/>**
+**<script language="VBScript" src="CommonFunctionsLibrary5.vbs"/>**
 
 
-**<script
-language="VBScript" src="DynamicDataDefinitions5.vbs"/>**
-
-
-**<script
-language="VBScript" src="CommonFunctionsLibrary5.vbs"/>**
-
-
-**<script
-language="VBScript">**
+**<script language="VBScript">**```
 
 
   
@@ -287,8 +261,7 @@ language="VBScript">**
 
 
 
-1. A
- Windows Script File (WSF) can contain multiple Jobs, tagged by
+-  A Windows Script File (WSF) can contain multiple Jobs, tagged by
  unique Job ID. In general, ITS contains only one job per file
 
 - Static
@@ -311,21 +284,8 @@ language="VBScript">**
  3,**  this statement
  includes a set of functions used by many scripts.
 
-- The
- last tag indicates that the entire module is written in Vbscript.
+- The  last tag indicates that the entire module is written in Vbscript.
  (WSH supports tagged sections in various script languages)
-
-
-
-
-
-
-
-
-  
-  
-
-
 
 
 ## Initialisation
@@ -337,8 +297,7 @@ language="VBScript">**
 
 
 
-As any script begins
-execution, local constants and variables are declared immediately
+As any script begins execution, local constants and variables are declared immediately
 after the Includes section.
 
 
@@ -348,26 +307,19 @@ after the Includes section.
 
 
 
-The very first procedure
-called by any script is a subroutine in commonfunctionslibrary called
+The very first procedure called by any script is a subroutine in commonfunctionslibrary called
 **initialise().**
 
 
-The
-**initialise** routine
-interprets the script name, builds a date and time stamp and creates
-a **log file name**,
-of the form ITS\_LOG\**scriptname\_username\_yyyymmddmmhhss.log**
-
-
-  
-  
+The **initialise** routine interprets the script name, builds a date and time stamp and creates
+a **log file name**, of the form ITS\_LOG\**scriptname\_username\_yyyymmddmmhhss.log**
 
 
 
 
-All
-subsequent script output is written to this logfile by the **message**
+
+
+All subsequent script output is written to this logfile by the **message**
 common subroutine. The **message**
 subroutine calls **logger**
 common function. **Logger**creates a **log
